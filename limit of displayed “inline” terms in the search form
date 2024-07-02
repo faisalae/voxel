@@ -1,0 +1,58 @@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var itemsToShow = 3;
+            var increment = 10;
+            var initialItemsToShow = itemsToShow;
+
+            // Add the "+ More" and "Show Less" links dynamically
+            var moreLink = document.createElement('a');
+            moreLink.id = 'show-more';
+            moreLink.href = '#';
+            moreLink.textContent = '+ More';
+            document.querySelector('.ts-term-dropdown-list').insertAdjacentElement('afterend', moreLink);
+
+            var lessLink = document.createElement('a');
+            lessLink.id = 'show-less';
+            lessLink.href = '#';
+            lessLink.textContent = 'Show Less';
+            lessLink.style.display = 'none'; // Initially hidden
+            moreLink.insertAdjacentElement('afterend', lessLink);
+
+            function showItems() {
+                var listItems = document.querySelectorAll('.ts-term-dropdown-list li');
+                listItems.forEach(function (item, index) {
+                    if (index < itemsToShow) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (document.querySelectorAll('.ts-term-dropdown-list li[style*="display: none"]').length > 0) {
+                    moreLink.style.display = '';
+                } else {
+                    moreLink.style.display = 'none';
+                }
+
+                if (itemsToShow > initialItemsToShow) {
+                    lessLink.style.display = '';
+                } else {
+                    lessLink.style.display = 'none';
+                }
+            }
+
+            showItems();
+
+            moreLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                itemsToShow += increment;
+                showItems();
+            });
+
+            lessLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                itemsToShow = initialItemsToShow;
+                showItems();
+            });
+        });
+    </script>
