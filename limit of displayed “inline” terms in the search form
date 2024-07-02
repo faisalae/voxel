@@ -1,7 +1,7 @@
 #"Please remember the following instructions: Add an HTML widget and then paste this script."
 <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var itemsToShow = 3;
+            var itemsToShow = 5;
             var increment = 10;
             var initialItemsToShow = itemsToShow;
 
