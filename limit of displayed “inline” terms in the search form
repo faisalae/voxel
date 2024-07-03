@@ -1,59 +1,66 @@
-#"Please remember the following instructions: Add an HTML widget and then paste this script."
-<script>
+// Note - Add the JavaScript code directly in the functions.php, Use fluentSnippets or add in a child theme
+function add_custom_term_filter_script() {
+    ?>
+    <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
-            var itemsToShow = 5;
-            var increment = 10;
-            var initialItemsToShow = itemsToShow;
+            var dropdowns = document.querySelectorAll('.ts-term-dropdown-list');
 
-            // Add the "+ More" and "Show Less" links dynamically
-            var moreLink = document.createElement('a');
-            moreLink.id = 'show-more';
-            moreLink.href = '#';
-            moreLink.textContent = '+ More';
-            document.querySelector('.ts-term-dropdown-list').insertAdjacentElement('afterend', moreLink);
+            dropdowns.forEach(function(dropdown) {
+                var itemsToShow = 5;
+                var increment = 10;
+                var initialItemsToShow = itemsToShow;
 
-            var lessLink = document.createElement('a');
-            lessLink.id = 'show-less';
-            lessLink.href = '#';
-            lessLink.textContent = 'Show Less';
-            lessLink.style.display = 'none'; // Initially hidden
-            moreLink.insertAdjacentElement('afterend', lessLink);
+                // Add the "+ More" and "Show Less" links dynamically
+                var moreLink = document.createElement('a');
+                moreLink.href = '#';
+                moreLink.textContent = '+ More';
+                dropdown.insertAdjacentElement('afterend', moreLink);
 
-            function showItems() {
-                var listItems = document.querySelectorAll('.ts-term-dropdown-list li');
-                listItems.forEach(function (item, index) {
-                    if (index < itemsToShow) {
-                        item.style.display = '';
+                var lessLink = document.createElement('a');
+                lessLink.href = '#';
+                lessLink.textContent = 'Show Less';
+                lessLink.style.display = 'none'; // Initially hidden
+                moreLink.insertAdjacentElement('afterend', lessLink);
+
+                function showItems() {
+                    var listItems = dropdown.querySelectorAll('li');
+                    listItems.forEach(function (item, index) {
+                        if (index < itemsToShow) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    if (dropdown.querySelectorAll('li[style*="display: none"]').length > 0) {
+                        moreLink.style.display = '';
                     } else {
-                        item.style.display = 'none';
+                        moreLink.style.display = 'none';
                     }
+
+                    if (itemsToShow > initialItemsToShow) {
+                        lessLink.style.display = '';
+                    } else {
+                        lessLink.style.display = 'none';
+                    }
+                }
+
+                showItems();
+
+                moreLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    itemsToShow += increment;
+                    showItems();
                 });
 
-                if (document.querySelectorAll('.ts-term-dropdown-list li[style*="display: none"]').length > 0) {
-                    moreLink.style.display = '';
-                } else {
-                    moreLink.style.display = 'none';
-                }
-
-                if (itemsToShow > initialItemsToShow) {
-                    lessLink.style.display = '';
-                } else {
-                    lessLink.style.display = 'none';
-                }
-            }
-
-            showItems();
-
-            moreLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                itemsToShow += increment;
-                showItems();
-            });
-
-            lessLink.addEventListener('click', function (e) {
-                e.preventDefault();
-                itemsToShow = initialItemsToShow;
-                showItems();
+                lessLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    itemsToShow = initialItemsToShow;
+                    showItems();
+                });
             });
         });
     </script>
+    <?php
+}
+add_action('wp_footer', 'add_custom_term_filter_script');
